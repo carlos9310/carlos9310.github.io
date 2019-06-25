@@ -66,6 +66,20 @@
     {% if page.date %}
     <meta property="article:published_time" content="{{ page.date | date: '%Y-%m-%d' }}">
     {% endif %}
+
+    <!--百度统计-->
+    {% if site.baidu.siteid %}
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?{{ site.baidu.siteid }}";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+    {% endif %}
+
     <script src="/assets/vendor/jquery/dist/jquery.min.js"></script>
     <script src="/assets/js/jquery-ui.js"></script>
     <script type="text/javascript">

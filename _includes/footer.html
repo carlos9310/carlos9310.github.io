@@ -10,12 +10,27 @@
         </div>
         <ul class="site-footer-links right mobile-hidden">
             <!-- 增加cnzz 数据统计 -->
-            <li>
-                <script type="text/javascript">
-                var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1275902302'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s5.cnzz.com/z_stat.php%3Fid%3D1275902302%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));
-                </script>
-            </li>
+            <!--<li>-->
+                <!--<script type="text/javascript">-->
+                <!--var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");-->
+                <!--document.write(unescape("%3Cspan id='cnzz_stat_icon_1275902302'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s5.cnzz.com/z_stat.php%3Fid%3D1275902302%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));-->
+                <!--</script>-->
+            <!--</li>-->
+            <!--百度统计-->
+            <!--<li>-->
+                <!--{% if site.baidu.siteid %}-->
+                <!--<script>-->
+                  <!--var _hmt = _hmt || [];-->
+                  <!--(function() {-->
+                    <!--var hm = document.createElement("script");-->
+                    <!--hm.src = "//hm.baidu.com/hm.js?{{ site.baidu.siteid }}";-->
+                    <!--var s = document.getElementsByTagName("script")[0];-->
+                    <!--s.parentNode.insertBefore(hm, s);-->
+                  <!--})();-->
+                <!--</script>-->
+                <!--{% endif %}-->
+            <!--</li>-->
+
             <li>
                 <a href="javascript:window.scrollTo(0,0)">TOP</a>
             </li>
@@ -30,12 +45,20 @@
             </li>
             {% endfor %}
             <li><a href="{{ site.subscribe_rss }}"><span class="octicon octicon-rss" style="color:orange;"></span></a></li>
-            <li>
-                <script type="text/javascript">
-                var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
-                document.write(unescape("%3Cspan id='cnzz_stat_icon_1275902302'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s5.cnzz.com/z_stat.php%3Fid%3D1275902302%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));
-                </script>
-            </li>
+            <!--百度统计-->
+            <!--<li>-->
+                <!--{% if site.baidu.siteid %}-->
+                <!--<script>-->
+                  <!--var _hmt = _hmt || [];-->
+                  <!--(function() {-->
+                    <!--var hm = document.createElement("script");-->
+                    <!--hm.src = "//hm.baidu.com/hm.js?{{ site.baidu.siteid }}";-->
+                    <!--var s = document.getElementsByTagName("script")[0];-->
+                    <!--s.parentNode.insertBefore(hm, s);-->
+                  <!--})();-->
+                <!--</script>-->
+                <!--{% endif %}-->
+            <!--</li>-->
         </ul>
     </div>
 </footer>

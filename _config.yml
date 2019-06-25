@@ -124,6 +124,9 @@ simple_jekyll_search:
 google:
     analytics_id: UA-92285152-1
 
+baidu:
+    siteid: aa7cca56f75b5bd3c2d90ce085a76513        # 百度统计 js 代码后的字符串[注册后获取]
+
 # ---------------- #
 #      Datas       #
 # ---------------- #

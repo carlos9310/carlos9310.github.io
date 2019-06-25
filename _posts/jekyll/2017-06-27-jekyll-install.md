@@ -105,6 +105,12 @@ _site        jekyll引擎转换生成的页面，最好将这个目录放进`.gi
 ## 评论插件
 
 * [为博客添加 Gitalk 评论插件](https://www.jianshu.com/p/78c64d07124d)
+* [解决配置gitalk插件后初始化登录时跳转回首页](https://blog.csdn.net/w47_csdn/article/details/88858343)
+
+## 待完善
+
+- [ ] 自动初始化gitalk评论 
+
 
 ## 参考资料
 
