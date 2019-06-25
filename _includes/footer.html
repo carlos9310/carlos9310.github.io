@@ -16,20 +16,21 @@
                 <!--document.write(unescape("%3Cspan id='cnzz_stat_icon_1275902302'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s5.cnzz.com/z_stat.php%3Fid%3D1275902302%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));-->
                 <!--</script>-->
             <!--</li>-->
-            <!--百度统计-->
+
             <!--<li>-->
-                <!--{% if site.baidu.siteid %}-->
-                <!--<script>-->
-                  <!--var _hmt = _hmt || [];-->
-                  <!--(function() {-->
-                    <!--var hm = document.createElement("script");-->
-                    <!--hm.src = "//hm.baidu.com/hm.js?{{ site.baidu.siteid }}";-->
-                    <!--var s = document.getElementsByTagName("script")[0];-->
-                    <!--s.parentNode.insertBefore(hm, s);-->
-                  <!--})();-->
-                <!--</script>-->
-                <!--{% endif %}-->
+                <div class="left mobile-block">
+                <span id="busuanzi_container_site_pv">
+                    访问量&nbsp;<span id="busuanzi_value_site_pv"></span>
+                </span>
+                <span id="busuanzi_container_site_uv">
+                    访客数&nbsp;<span id="busuanzi_value_site_uv"></span>
+                </span>
+                <span id="busuanzi_container_page_pv">
+                    阅读量&nbsp;<span id="busuanzi_value_page_pv"></span>
+                </span>
+                </div>
             <!--</li>-->
+
 
             <li>
                 <a href="javascript:window.scrollTo(0,0)">TOP</a>
@@ -45,20 +46,7 @@
             </li>
             {% endfor %}
             <li><a href="{{ site.subscribe_rss }}"><span class="octicon octicon-rss" style="color:orange;"></span></a></li>
-            <!--百度统计-->
-            <!--<li>-->
-                <!--{% if site.baidu.siteid %}-->
-                <!--<script>-->
-                  <!--var _hmt = _hmt || [];-->
-                  <!--(function() {-->
-                    <!--var hm = document.createElement("script");-->
-                    <!--hm.src = "//hm.baidu.com/hm.js?{{ site.baidu.siteid }}";-->
-                    <!--var s = document.getElementsByTagName("script")[0];-->
-                    <!--s.parentNode.insertBefore(hm, s);-->
-                  <!--})();-->
-                <!--</script>-->
-                <!--{% endif %}-->
-            <!--</li>-->
+
         </ul>
     </div>
 </footer>
@@ -66,6 +54,125 @@
 <script src="/assets/vendor/share.js/dist/js/share.min.js"></script>
 <script src="/assets/js/geopattern.js"></script>
 <script src="/assets/js/prism.js"></script>
+{% if site.lean_cloud.enable %}
+<script src="https://cdn1.lncld.net/static/js/3.10.0/av-min.js"></script>
+<script> AV.initialize("{{site.lean_cloud.app_id}}", "{{site.lean_cloud.app_key}}");</script>
+<script type="text/javascript">
+    function showTime(Counter) {
+        var query = new AV.Query(Counter);
+        var entries = [];
+        var $visitors = $(".leancloud_visitors");
+
+        $visitors.each(function () {
+            entries.push($(this).attr("id").trim());
+        });
+
+        query.containedIn('url', entries);
+        query.find()
+            .done(function (results) {
+                var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+                var OLD_COUNT_CONTAINER_REF = '.old-visitors-count';
+
+                // if (results.length === 0) {
+                //     $visitors.find(COUNT_CONTAINER_REF).text(0);
+                //     return;
+                // }
+
+                for (var i = 0; i < results.length; i++) {
+                    var item = results[i];
+                    var url = item.get('url');
+                    var time = item.get('time');
+                    var element = document.getElementById(url);
+
+                    $(element).find(COUNT_CONTAINER_REF).text(time);
+                }
+                for (var i = 0; i < entries.length; i++) {
+                    var url = entries[i];
+                    var element = document.getElementById(url);
+                    var countSpan = $(element).find(COUNT_CONTAINER_REF);
+                    if (countSpan.text() == '') {
+                        var oldCountSpan = $(element).find(OLD_COUNT_CONTAINER_REF).text();
+                        if (oldCountSpan != '') {
+                            countSpan.text(0 + parseInt(oldCountSpan));
+                        } else {
+                            countSpan.text(0);
+                        }
+                    }
+                }
+            })
+            .fail(function (object, error) {
+                console.log("Error: " + error.code + " " + error.message);
+            });
+    }
+
+    function addCount(Counter) {
+        var $visitors = $(".leancloud_visitors");
+        var url = $visitors.attr('id').trim();
+        var title = $visitors.attr('data-flag-title').trim();
+        var query = new AV.Query(Counter);
+
+        query.equalTo("url", url);
+        query.find({
+            success: function (results) {
+                if (results.length > 0) {
+                    var counter = results[0];
+                    counter.fetchWhenSave(true);
+                    counter.increment("time");
+                    counter.save(null, {
+                        success: function (counter) {
+                            var $element = $(document.getElementById(url));
+                            $element.find('.leancloud-visitors-count').text(counter.get('time'));
+                        },
+                        error: function (counter, error) {
+                            console.log('Failed to save Visitor num, with error message: ' + error.message);
+                        }
+                    });
+                } else {
+                    var newcounter = new Counter();
+                    /* Set ACL */
+                    var acl = new AV.ACL();
+                    acl.setPublicReadAccess(true);
+                    acl.setPublicWriteAccess(true);
+                    newcounter.setACL(acl);
+                    /* End Set ACL */
+                    newcounter.set("title", title);
+                    newcounter.set("url", url);
+                    var OLD_COUNT_CONTAINER_REF = '.old-visitors-count';
+                    var $element = $(document.getElementById(url));
+                    var oldCountSpan = $element.find(OLD_COUNT_CONTAINER_REF).text();
+                    if (oldCountSpan != '') {
+                        newcounter.set("time", parseInt(oldCountSpan) + 1);
+                    } else {
+                        newcounter.set("time", 1);
+                    }
+                    newcounter.save(null, {
+                        success: function (newcounter) {
+                            var $element = $(document.getElementById(url));
+                            $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+                        },
+                        error: function (newcounter, error) {
+                            console.log('Failed to create');
+                        }
+                    });
+                }
+            },
+            error: function (error) {
+                console.log('Error:' + error.code + " " + error.message);
+            }
+        });
+    }
+    $(function () {
+        // debugger
+        var Counter = AV.Object.extend("Counter");
+        if ($('.leancloud_visitors').length == 1) {
+            addCount(Counter);
+        } else {
+            showTime(Counter);
+        }
+    });
+</script>
+{% endif %}
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <link rel="stylesheet" href="/assets/css/globals/prism.css">
 <script>
 jQuery(document).ready(function($) {
@@ -93,6 +200,20 @@ jQuery(document).ready(function($) {
 
     ga('create', '{{ site.google.analytics_id }}', 'auto');
     ga('send', 'pageview');
+    </script>
+</div>
+{% endif %}
+
+{% if site.baidu.analytics_id %}
+<div style="display:none">
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?{{site.baidu.analytics_id}}";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
     </script>
 </div>
 {% endif %}

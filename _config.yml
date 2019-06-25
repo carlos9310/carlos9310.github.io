@@ -127,6 +127,12 @@ google:
 baidu:
     siteid: aa7cca56f75b5bd3c2d90ce085a76513        # 百度统计 js 代码后的字符串[注册后获取]
 
+lean_cloud:
+    enable: true
+    app_id: nUgh1P0q8m6gzfgMSUkA7LY1-MdYXbMMI
+    app_key: Stj4rJUxnDgK3qLxdVpMK0E3
+
+
 # ---------------- #
 #      Datas       #
 # ---------------- #

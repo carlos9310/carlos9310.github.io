@@ -19,6 +19,17 @@ layout: default
             <a href="/categories/#{{ cat }}" title="{{ cat }}">{{ cat }}</a>
           </span>
           {% endfor %}
+
+
+          <span id="{{ site.url }}{{ post.url }}" class="leancloud_visitors meta_data_item" data-flag-title="{{ post.title }}">
+            <span class="post-meta-item-icon">
+             <span class="octicon octicon-eye"></span>
+            </span>
+            <span class="old-visitors-count" style="display: none;">{{post.views|first}}</span>
+            <span class="leancloud-visitors-count"></span>
+            <span class="post-meta-item-text">次浏览</span>
+          </span>
+
         </div>
       </div>
     </div>
@@ -31,7 +42,6 @@ layout: default
   <div class="column three-fourths" >
     <article class="article-content markdown-body">
     {{ content }}
-    {% include article-footer.html %}
     </article>
     <div class="share">
       {% include sns-share.html %}

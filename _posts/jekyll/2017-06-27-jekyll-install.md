@@ -85,6 +85,7 @@ description:
  其他模板也可参考
 - [https://github.com/qiubaiying/qiubaiying.github.io](https://github.com/qiubaiying/qiubaiying.github.io)
 - [https://dongchuan.github.io/](https://dongchuan.github.io/)
+- [https://github.com/cloudchou/cloudchou.github.io](https://github.com/cloudchou/cloudchou.github.io)
 - [http://ywtail.github.io](http://ywtail.github.io) 
 - [https://github.com/EdisonXu/EdisonXu.github.io](https://github.com/EdisonXu/EdisonXu.github.io)
 
@@ -110,6 +111,7 @@ _site        jekyll引擎转换生成的页面，最好将这个目录放进`.gi
 ## 待完善
 
 - [ ] 自动初始化gitalk评论 
+- [ ] blog阅读量统计 
 
 
 ## 参考资料

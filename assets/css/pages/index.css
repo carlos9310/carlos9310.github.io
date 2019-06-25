@@ -37,3 +37,12 @@
     font-size: 1.25em;
   }
 }
+
+
+.meta_data_item {
+    margin-right: 20px;
+}
+
+.leancloud_visitors .post-meta-item-text{
+    margin-left: -5px;
+}
