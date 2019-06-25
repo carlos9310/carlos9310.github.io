@@ -1,117 +1,106 @@
 ---
 layout: post
-title: Jekyll Ubuntu 环境初始化
+title: Jekyll On Windows 从本地搭建到github部署
 category: jekyll
 description: 
 ---
 
-在发布到github pages 时，需要本地预览效果，这时需要安装本的jekyll环境，这里说明安装过程中的主要步骤以及相应的解决办法。
+【持续更新中...】记一次搭建属于自己博客的步骤(本地os为win7 64bits)，仅供参考。
 
-## Install CURL
 
+## 要求
+1. Open Git Bash
+
+2. Check whether you have Ruby installed
+
+	```
+	$ ruby --version
+	ruby 2.6.3p62 (2019-04-16 revision 67580) [x64-mingw32]
+	```
+
+3. If you don't have Ruby installed, [install Ruby](https://rubyinstaller.org/downloads/)
+
+4. Install Bundler
+
+	```
+	$ gem install bundler
+	```
+
+## 最简易的本地Jekyll site搭建
+### Step 1: Create a local repository for your Jekyll site
+
+1. Open Git Bash
+
+2. On your local computer, initialize a new Git repository for your Jekyll site
+
+	``` 
+	$ git init JEKYLL-SITE-REPOSITORY-NAME
+	```
+
+3. Change directories to the new repository you created
+
+	``` 
+	$ cd JEKYLL-SITE-REPOSITORY-NAME
+	```
+
+
+### Step 2: Install Ruby Dependencies 
+
+1. Create the file Gemfile under the root directory of your local Jekyll site repository， save it 
+
+	```
+	source 'https://rubygems.org'
+	if RUBY_PLATFORM=~ /win32|mingw|mswin|x64_mingw/ 
+		gem 'tzinfo-data'
+		gem 'wdm'
+	end
+	gem 'github-pages', group: :jekyll_plugins
+	```
+
+2. Install Jekyll and other dependencies from the GitHub Pages gem
+
+	```
+	$ bundle install
+	```
+
+
+### Step 3: Build your local Jekyll site
+1. Navigate into the root directory of your local Jekyll site repository
+
+2. Run your Jekyll site locally
+
+	```
+	$ bundle exec jekyll serve
+	```
+
+3. Preview your local Jekyll site in your web browser at http://localhost:4000
+
+## 添加主题模板
+
+在以上简易站点基础下，添加已有博客模板中相应的文件(夹)即可。自己结合了以下两个进行添加
+
+- [https://github.com/comsince/comsince.github.io](https://github.com/comsince/comsince.github.io)
+- [https://github.com/mzlogin/mzlogin.github.io](https://github.com/mzlogin/mzlogin.github.io)
+
+ 其他模板也可参考
+- [https://github.com/qiubaiying/qiubaiying.github.io](https://github.com/qiubaiying/qiubaiying.github.io)
+- [https://dongchuan.github.io/](https://dongchuan.github.io/)
+- [http://ywtail.github.io](http://ywtail.github.io) 
+- [https://github.com/EdisonXu/EdisonXu.github.io](https://github.com/EdisonXu/EdisonXu.github.io)
+
+[目录结构说明](https://www.jianshu.com/p/50d97f32e558)
 ```
-apt-get install curl
-```
-
-## Install RVM 
-
-```
-gpg2 --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-curl -sSL https://get.rvm.io | bash -s stable
-```
-
-## source rvm environment
-
-```
-source /home/user/.rvm/scripts/rvm
-```
-
-## Install Ruby Dependencies 
-
-```
-rvm requirements
-```
-
-## Install ruby
-
-```
-rvm isntall 2.4.0
-```
-
-## set Default ruby version
-
-```
-rvm use 2.4.0 --default
-```
-
-## install jekyll
-
-```
-gem install jekyll kramdown
-```
-gem 包含在rubygem中，安装完ruby后，自然会安装
-
-
-## 依赖安装问题：
-```
-/home/user/.rvm/rubies/ruby-2.4.0/lib/ruby/2.4.0/rubygems/core_ext/kernel_require.rb:55:in `require': cannot load such file -- bundler (LoadError)
-	from /home/user/.rvm/rubies/ruby-2.4.0/lib/ruby/2.4.0/rubygems/core_ext/kernel_require.rb:55:in `require'
-	from /home/user/.rvm/gems/ruby-2.4.0/gems/jekyll-3.5.0/lib/jekyll/plugin_manager.rb:46:in `require_from_bundler'
-	from /home/user/.rvm/gems/ruby-2.4.0/gems/jekyll-3.5.0/exe/jekyll:9:in `<top (required)>'
-	from /home/user/.rvm/gems/ruby-2.4.0/bin/jekyll:22:in `load'
-	from /home/user/.rvm/gems/ruby-2.4.0/bin/jekyll:22:in `<main>'
-	from /home/user/.rvm/gems/ruby-2.4.0/bin/ruby_executable_hooks:15:in `eval'
-	from /home/user/.rvm/gems/ruby-2.4.0/bin/ruby_executable_hooks:15:in `<main>'
-
-```
-执行以下命令
-
-```
-gem install bundler
-gem install github-pages
-```
-
-## JavaScript 运行环境问题 
-
-```
-Jekyll 3.4.3 | Error:  Could not find a JavaScript runtime. See https://github.com/rails/execjs for a list of available runtimes.
-```
-
-安装nodejs
-
-```
-sudo apt-get install nodejs
-```
-
-### 问题描述
-
-```
-  Liquid Exception: undefined method `map' for false:FalseClass Did you mean? tap in /_layouts/page.html
-
-```
-
-* [问题参考](https://github.com/github/pages-gem/issues/351) 使用jekyll新建一个主页，解决此问题
-
-```
- Deprecation: The 'gems' configuration option has been renamed to 'plugins'. Please update your config file accordingly.
-```
-配置文件_config.yml中，使用了 plugins 的配置项，应该是用plugins替换掉gems。
-
-
-## 调用github 无法获取token的问题
-
-* 问题描述
-```
-GitHub Metadata: No GitHub API authentication could be found. Some fields may be missing or have incorrect data
+_config.yml  保存配置数据
+_drafts      未发布的文章
+assets       辅助资源，css布局/js脚本/图片等
+_pages       其他需要生成的网页，如About页	
+_includes    包含部分文章的布局，通过include标签将其中文件包含进来
+_layouts     包裹在文章外部的模板，可以在YAML头信息中根据不同文章进行选择，标签{{  content  }}可以将content插入页面中
+_posts       发布的文章，文件标题必须符合：`YEAR-MONTH-DAY-TITLE.MARKUP`
+_data        站点数据，可用过`site.data.members`访问其中的数据 (the jekyll engine will autoload all yaml file`members.yml`under the directory)
+_site        jekyll引擎转换生成的页面，最好将这个目录放进`.gitignore`文件中
 ```
 
-* 解决方法
-```
-JEKYLL_GITHUB_TOKEN=<your token> jekyll serve -H 172.16.42.71
-```
-
-* 参考资料
-[No GitHub API authentication" error](https://github.com/github/pages-gem/issues/399#issuecomment-361091215)
 
 ## 评论插件
 
@@ -119,5 +108,6 @@ JEKYLL_GITHUB_TOKEN=<your token> jekyll serve -H 172.16.42.71
 
 ## 参考资料
 
-* [How To Install Ruby on Rails on Ubuntu](https://tecadmin.net/install-ruby-on-rails-on-ubuntu/)
+* [Setting up your GitHub Pages site locally with Jekyll](https://help.github.com/en/articles/setting-up-your-github-pages-site-locally-with-jekyll)
 * [Jekyll中国](http://jekyllcn.com/)
+* [Jekyll目录结构和运行机理	](https://blog.csdn.net/HopefulLight/article/details/78366374)

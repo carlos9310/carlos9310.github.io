@@ -94,18 +94,13 @@ github_username: carlos9310
 # zhihu_username: comsince
 # twitter_username: comsince
 
-
 # ---------------- #
 #      Comments    #
 # ---------------- #
-# support provider: disqus, duoshuo,gittalk
-comments_provider: gittalk
+# support provider: gittalk
+comments_provider: gitalk
 # !!!重要!!! 请修改下面两个用户名为你自己申请的
 # !!!Important!!! Please modify usernames below to yours
-duoshuo_username: carlos9310
-disqus_username: carlos9310
-# 在使用 disqus 的时候可点击显示多说评论框
-lazy_load_duoshuo: false
 
 # https://github.com/gitalk/gitalk#install
 gitalk:
@@ -113,8 +108,6 @@ gitalk:
     repo: github_pages_comments
     clientID: 32cbf0baaa4c7109354d
     clientSecret: 3c50229777246501ea06517a030097bc96d30b5a
-
-
 
 # ---------------- #
 #      Search      #
