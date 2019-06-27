@@ -34,17 +34,17 @@ navs:
     href: /categories/
     label: 分类
 
-  -
-    href: /wiki/
-    label: 维基
+#  -
+#    href: /wiki/
+#    label: 维基
 
   -
     href: /open-source/
     label: 开源
     
-  -
-    href: /links/
-    label: 链接
+#  -
+#    href: /links/
+#    label: 链接
 
   -
     href: /about/
@@ -77,10 +77,10 @@ plugins:
     - jekyll-feed
     - jemoji
 #     - jekyll-mentions
-collections:
-    wiki:
-        output: true
-        permalink: /wiki/:path/
+#collections:
+#    wiki:
+#        output: true
+#        permalink: /wiki/:path/
 
 repository: carlos9310/carlos9310.github.io
 
@@ -129,13 +129,13 @@ baidu:
 
 lean_cloud:
     enable: true
-    app_id: nUgh1P0q8m6gzfgMSUkA7LY1-MdYXbMMI
-    app_key: Stj4rJUxnDgK3qLxdVpMK0E3
+    app_id: tNrgz0QdwvywCfzrlSIyeYp4-MdYXbMMI
+    app_key: RMuICf7NkKW2vxksmr7W5b70
 
 
 # ---------------- #
 #      Datas       #
 # ---------------- #
-skill_software_keywords: [Python,Java, JavaScript, SQL, Design Patterns]
-# skill_mobile_app_keywords: [Android, J2EE Engineering]
-# skill_windows_keywords: [Java, Android]
+skill_software_keywords: [Python, Java, JavaScript, SQL, Design Patterns]
+skill_update_keywords: [hadoop, spark, sparksql, hive, ELK, ML, DL, NLP]
+

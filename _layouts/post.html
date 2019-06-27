@@ -20,8 +20,7 @@ layout: default
           </span>
           {% endfor %}
 
-
-          <span id="{{ site.url }}{{ post.url }}" class="leancloud_visitors meta_data_item" data-flag-title="{{ post.title }}">
+          <span name="post" id="{{ site.url }}{{ page.url }}" class="leancloud_visitors meta_data_item" data-flag-title="{{ page.title }}">
             <span class="post-meta-item-icon">
              <span class="octicon octicon-eye"></span>
             </span>
@@ -43,9 +42,9 @@ layout: default
     <article class="article-content markdown-body">
     {{ content }}
     </article>
-    <div class="share">
-      {% include sns-share.html %}
-    </div>
+    <!--<div class="share">-->
+      <!--{% include sns-share.html %}-->
+    <!--</div>-->
     <div class="comment">
       {% include comments.html %}
     </div>

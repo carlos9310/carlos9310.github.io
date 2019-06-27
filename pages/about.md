@@ -12,28 +12,22 @@ permalink: /about/
 ## 联系
 
 * GitHub：[https://github.com/carlos9310](https://github.com/carlos9310)
-* 博客：[{{ site.title }}]({{ site.url }})
+* 邮箱：carlos56059310@gmail.com
 
 
-## Skill Keywords
+## 技能
 
-#### Software Engineer Keywords
+#### 软件工程
 <div class="btn-inline">
     {% for keyword in site.skill_software_keywords %}
     <button class="btn btn-outline" type="button">{{ keyword }}</button>
     {% endfor %}
 </div>
 
-<!-- #### Mobile Developer Keywords
+#### 正在关注
 <div class="btn-inline">
-    {% for keyword in site.skill_mobile_app_keywords %}
+    {% for keyword in site.skill_update_keywords %}
     <button class="btn btn-outline" type="button">{{ keyword }}</button>
     {% endfor %}
 </div>
-
-#### Windows Developer Keywords
-<div class="btn-inline">
-    {% for keyword in site.skill_windows_keywords %}
-    <button class="btn btn-outline" type="button">{{ keyword }}</button>
-    {% endfor %}
-</div> -->
+ 
