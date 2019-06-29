@@ -91,6 +91,7 @@ description:
 - [https://github.com/PriestTomb/PriestTomb.github.io](https://github.com/PriestTomb/PriestTomb.github.io)
 - [https://github.com/jinyb09017/jinyb09017.github.io](https://github.com/jinyb09017/jinyb09017.github.io)
 
+
 [目录结构说明](https://www.jianshu.com/p/50d97f32e558)
 ```
 _config.yml  保存配置数据
@@ -117,9 +118,15 @@ _site        jekyll引擎转换生成的页面，最好将这个目录放进`.gi
 * [jekyll使用LeanCloud记录文章的访问次数](https://priesttomb.github.io/%E6%97%A5%E5%B8%B8/2017/11/06/jekyll%E4%BD%BF%E7%94%A8LeanCloud%E8%AE%B0%E5%BD%95%E6%96%87%E7%AB%A0%E7%9A%84%E8%AE%BF%E9%97%AE%E6%AC%A1%E6%95%B0/)
 * [jekyll Github Pages 博客搭建 并实现评论 阅读量 以及分类功能](https://jinyb09017.github.io/2017/06/jekyll-Github-Pages-%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA-%E5%B9%B6%E5%AE%9E%E7%8E%B0%E8%AF%84%E8%AE%BA-%E9%98%85%E8%AF%BB%E9%87%8F-%E4%BB%A5%E5%8F%8A%E5%88%86%E7%B1%BB%E5%8A%9F%E8%83%BD/)
 
+## 数学公式支持
+
+* [给Jekyll博客添加Latex公式支持](https://todebug.com/add-eqution-support-in-jekyll/) 
+
 ## 待完善
 
 - [ ] 自动初始化gitalk评论 
+- [ ] 博客的更新日期
+- [ ] 博客的tag
  
 ## 参考资料
 

@@ -71,16 +71,25 @@ permalink: /:year/:month/:day/:title/
 plugins:
     - jekyll-github-metadata
     - rouge
-#     - jekyll-html-pipeline
+    - jekyll-html-pipeline
     - jekyll-paginate
     - jekyll-sitemap
     - jekyll-feed
     - jemoji
-#     - jekyll-mentions
+    - jekyll-jupyter-notebook
+    - jekyll-mentions
 #collections:
 #    wiki:
 #        output: true
 #        permalink: /wiki/:path/
+
+#jekyll_admin:
+#    hidden_links:
+#        - posts
+#        - pages
+#        - staticfiles
+#        - datafiles
+#        - configuration
 
 repository: carlos9310/carlos9310.github.io
 
