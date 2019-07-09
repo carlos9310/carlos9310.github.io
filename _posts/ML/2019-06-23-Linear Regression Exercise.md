@@ -5,6 +5,10 @@ categories: ML
 description: 机器学习介绍
 ---
 
+源文件 [Linear Regression Exercise](https://github.com/carlos9310/carlos9310.github.io/tree/master/assets/source/Linear%20Regression%20Exercise.ipynb)
+
+数据文件 [height.vs.temperature.csv](https://github.com/carlos9310/carlos9310.github.io/tree/master/assets/data/height.vs.temperature.csv)
+
 # 练习说明
 
 气温会随着海拔高度的升高而降低, 我们可以通过测量不同海拔高度的气温来预测海拔高度和气温的关系. 
@@ -19,7 +23,7 @@ $$
 
 我们提供了在9个不同高度测量的气温值, 请你根据今天学习的线性回归方法预测 $a$ 和 $b$ 的值. 根据这个公式, 我们预测一下在8000米的海拔, 气温会是多少?
 
-数据文件为[height.vs.temperature.csv](/assets/data/height.vs.temperature.csv)
+
 
 
 ```python
