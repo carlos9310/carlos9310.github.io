@@ -146,5 +146,5 @@ lean_cloud:
 #      Datas       #
 # ---------------- #
 skill_software_keywords: [Python, Java, JavaScript, SQL, Design Patterns]
-skill_update_keywords: [hadoop, spark, sparksql, hive, ELK, ML, DL, NLP]
+skill_update_keywords: [hadoop, spark, flink, sparksql, hive, ELK, ML, DL, NLP]
 
