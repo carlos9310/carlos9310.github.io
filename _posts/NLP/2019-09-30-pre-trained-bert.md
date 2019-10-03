@@ -1201,7 +1201,7 @@ def get_next_sentence_output(bert_config, input_tensor, labels):
 
 - events.out.tfevents.1570029823.04c93f97d224 :事件文件，tensorboard可加载显示
 
-- graph.pbtxt : 以Protobuffer格式描述的模型结构文件，记录了模型中所有的节点信息，内容大致如下：
+- graph.pbtxt : 以Protobuffer格式描述的模型结构文件(text格式的图文件(.pbtext),二进制格式的图文件为(.pb))，记录了模型中所有的节点信息，内容大致如下：
 
     ````
     node {
