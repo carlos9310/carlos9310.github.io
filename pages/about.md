@@ -9,15 +9,15 @@ menu: 关于
 permalink: /about/
 ---
 
-## 联系
+## contact
 
 * GitHub：[https://github.com/carlos9310](https://github.com/carlos9310)
 * 邮箱：carlos56059310@gmail.com
 
 
-## 技能
+## skill
 
-#### 软件工程
+#### software engineering
 <div class="btn-inline">
     {% for keyword in site.skill_software_keywords %}
     <button class="btn btn-outline" type="button">{{ keyword }}</button>
