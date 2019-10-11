@@ -12,7 +12,7 @@ permalink: /about/
 ## contact
 
 * GitHub：[https://github.com/carlos9310](https://github.com/carlos9310)
-* 邮箱：carlos56059310@gmail.com
+* Email：carlos56059310@gmail.com
 
 
 ## skill
