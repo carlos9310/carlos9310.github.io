@@ -24,7 +24,7 @@ permalink: /about/
     {% endfor %}
 </div>
 
-#### 正在关注
+#### following
 <div class="btn-inline">
     {% for keyword in site.skill_update_keywords %}
     <button class="btn btn-outline" type="button">{{ keyword }}</button>

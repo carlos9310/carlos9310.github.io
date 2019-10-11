@@ -1190,7 +1190,7 @@ def get_next_sentence_output(bert_config, input_tensor, labels):
 
 基于上述搭建好的模型结构及相应的损失函数，在训练阶段，利用相应的优化器(AdamWeightDecayOptimizer)优化损失函数，使其减小，并保存不同训练步数对应的模型参数，直到跑完所有步数，从而确定最终的模型结构与参数。由于BERT在预训练中使用了estimator这种高级API形式，在训练完成后会自动生成 **ckpt格式的模型文件(结构和数据是分开的)** 及可供tensorboard查看的事件文件。具体文件说明如下：
 
-- checkpoint : 保存了ckpt文件列表，可以用来迅速查找最近一次的ckpt文件。(每个ckpt文件对应一个模型)其内容如下所示
+- checkpoint : 记录了模型文件的路径信息列表，可以用来迅速查找最近一次的ckpt文件。(每个ckpt文件对应一个模型)其内容如下所示
 
     ```
     model_checkpoint_path: "model.ckpt-20"
@@ -1248,7 +1248,7 @@ def get_next_sentence_output(bert_config, input_tensor, labels):
 
 - model.ckpt-20.index : 模型文件中的映射表( Each key is a name of a tensor and its value is a serialized BundleEntryProto. Each BundleEntryProto describes the metadata of a tensor: which of the "data" files contains the content of a tensor, the offset into that file, checksum, some auxiliary data, etc.)部分 (二进制文件)
 
-- model.ckpt-20.meta : 模型文件中的结构(GraphDef, SaverDef, and so on)部分 (二进制文件)
+- model.ckpt-20.meta : 模型文件中的(图)结构(GraphDef, SaverDef, MateInfoDef,SignatureDef,CollectionDef等)部分 (**二进制文件，内容和graph.pbtxt基本一样，其是一个序列化的MetaGraphDef protocol buffer**)
 
 在评估阶段，直接加载训练好的模型结构与参数，对预测样本进行预测即可。 
 
