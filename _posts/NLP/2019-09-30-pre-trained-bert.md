@@ -1248,7 +1248,7 @@ def get_next_sentence_output(bert_config, input_tensor, labels):
 
 - model.ckpt-20.index : 模型文件中的映射表( Each key is a name of a tensor and its value is a serialized BundleEntryProto. Each BundleEntryProto describes the metadata of a tensor: which of the "data" files contains the content of a tensor, the offset into that file, checksum, some auxiliary data, etc.)部分 (二进制文件)
 
-- model.ckpt-20.meta : 模型文件中的(图)结构(GraphDef, SaverDef, MateInfoDef,SignatureDef,CollectionDef等)部分 (**二进制文件，内容和graph.pbtxt基本一样，其是一个序列化的MetaGraphDef protocol buffer**)
+- model.ckpt-20.meta : 模型文件中的(图)结构(**由GraphDef, SaverDef, MateInfoDef,SignatureDef,CollectionDef等组成的MetaGraphDef**)部分 (**二进制文件，内容和graph.pbtxt基本一样，其是一个序列化的MetaGraphDef protocol buffer**)
 
 在评估阶段，直接加载训练好的模型结构与参数，对预测样本进行预测即可。 
 
