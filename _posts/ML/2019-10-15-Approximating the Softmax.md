@@ -449,7 +449,13 @@ def _compute_sampled_logits(weights,
 
     return out_logits, out_labels
 ```
-下面主要说明该代码涉及NCE的部分。首先通过内置的采样器选取num_sampled个负样本，然后解析采到的负样本编号sampled、期望采到正样本的个数/概率true_expected_count与期望采到负样本的个数/概率sampled_expected_count，接着与mini_batch个正样本编号进行拼接操作(**这里mini_batch个正样本共享num_sampled个负样本**)，然后将拼接后的所有样本编号通过embedding_lookup到weights中选取参数得到all_w(形状为[batch_size + num_sampled, dim])，并将其分成两部分true_w(形状为[batch_size, dim])和sampled_w(形状为[num_sampled, dim])。同样地对biases进行相同的操作，可得all_b(形状为[batch_size + num_sampled])、true_b(形状为[batch_size ])和sampled_b(形状为[num_sampled])。
+下面主要说明该代码涉及NCE的部分。首先通过内置的采样器选取num_sampled个负样本，然后解析采到的负样本编号sampled、期望采到正样本的个数/概率true_expected_count与期望采到负样本的个数/概率sampled_expected_count，(其中每一类的概率服从这样一个分布：
+
+$$P(class) = (log(class + 2) - log(class + 1)) / log(range\_max + 1)$$   
+
+由于word2vec里面每一个word(对应一个class)出现的次数越多，则其对应的class(index)越小，range_max是总类别的数量，可以看出class越小，被取到的几率越大，即**越频繁的词被取到的几率越大，会优先选择词频高的词作为负样本**。)
+
+接着与mini_batch个正样本编号进行拼接操作(**这里mini_batch个正样本共享num_sampled个负样本**)，然后将拼接后的所有样本编号通过embedding_lookup到weights中选取参数得到all_w(形状为[batch_size + num_sampled, dim])，并将其分成两部分true_w(形状为[batch_size, dim])和sampled_w(形状为[num_sampled, dim])。同样地对biases进行相同的操作，可得all_b(形状为[batch_size + num_sampled])、true_b(形状为[batch_size ])和sampled_b(形状为[num_sampled])。
 
 接下来便是true_logits与sampled_logits的计算了。
 
