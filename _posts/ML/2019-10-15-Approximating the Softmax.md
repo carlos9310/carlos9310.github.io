@@ -144,7 +144,7 @@ $$
 
 ## NCE in tensorflow
  
-下面以训练词向量为例(完整代码见[tensorflow词向量训练实战](https://mp.weixin.qq.com/s/dfNbvDizbigquizLQgZNug))，详细解读下tensorflow中是如何实现nce_loss的。 
+下面以训练词向量为例(完整代码见[tensorflow词向量训练实战](https://mp.weixin.qq.com/s/dfNbvDizbigquizLQgZNug)或[https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/word2vec/word2vec_basic.py](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/word2vec/word2vec_basic.py))，详细解读下tensorflow中是如何实现nce_loss的。 
 
 首先是图的构造，这里主要关注tf.nn.nce_loss这个函数的入参，具体说明见源码。
 ```
@@ -475,5 +475,6 @@ $$P(class) = (log(class + 2) - log(class + 1)) / log(range\_max + 1)$$
 * [logistic_regression](https://ml-cheatsheet.readthedocs.io/en/latest/logistic_regression.html)
 * [linear-classify#softmax](https://cs231n.github.io/linear-classify/#softmax)
 
+* [https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/word2vec/word2vec_basic.py](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/word2vec/word2vec_basic.py)
 * [tensorflow词向量训练实战](https://mp.weixin.qq.com/s/dfNbvDizbigquizLQgZNug)
 
