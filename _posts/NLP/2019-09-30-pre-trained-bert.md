@@ -3,7 +3,7 @@ layout: post
 title: 预训练模型-BERT预训练源码解读笔记
 categories: [NLP] 
 ---
-之前总是直接用官网预训练好的BERT模型，对预训练部分的认识只停留在其同时训练两个无监督的任务：masked LM和Next Sentence Prediction (NSP)。而之后的SOTA模型如XLNet、RoBERTa、ALBERT等都属于BERT的追随者。因此有必要全面解读BERT的方方面面。
+之前总是直接用预训练好的BERT模型，对预训练部分的认识只停留在其同时训练两个无监督的任务：masked LM和Next Sentence Prediction (NSP)。而之后的SOTA模型如XLNet、RoBERTa、ALBERT等都属于BERT的追随者。因此有必要详细了解BERT预训练的细节。
 
 本篇post主要从代码角度解读BERT的预训练的思路与细节。
 
@@ -24,16 +24,16 @@ python create_pretraining_data.py \
   --random_seed=12345 \
   --dupe_factor=5
 ```
-其中input_file为初始训练语料的**文件路径**，**可有多个(用逗号分隔)**；output_file指定了生成.tfrecord格式的**文件路径**，**可有多个(用逗号分隔)**；vocab_file预训练的词表文件，直接用google提供的即可；max_seq_length 表示**拼接后的句子对**组成的序列中包含Wordpiece级别的token数的上限，**超过部分，需将较长的句子进行首尾截断**；max_predictions_per_seq表示每个序列中需要预测的token数的上限；masked_lm_prob表示生成的序列中被masked的token占总token数的比例，且有如下关系**max_predictions_per_seq 约等于 max_seq_length * masked_lm_prob**；random_seed为随机种子，便于复现结果；dupe_factor表示重复因子，即重复创建TrainingInstance的次数，**因每次随机生成mask,所以需预测的mask的token是不同的**。
+其中input_file为初始训练语料的**文件路径**，**可有多个(用逗号分隔)**；output_file指定了生成.tfrecord格式的**文件路径**，**可有多个(用逗号分隔)**；vocab_file预训练的词表文件，直接用google提供的即可。**若使用自己生成的 词表需重新训练，但需保证自己有足够多的文本语料**；max_seq_length 表示**拼接后的句子对**组成的序列中包含Wordpiece级别的token数的上限，**超过部分，需将较长的句子进行首尾截断**；max_predictions_per_seq表示每个序列中需要预测的token数的上限；masked_lm_prob表示生成的序列中被masked的token占总token数的比例(**这里的masked是广义的mask，即将选中的token替换成[mask]或保持原词汇或随机替换成词表中的另一个词**)，且有如下关系**max_predictions_per_seq 约等于 max_seq_length * masked_lm_prob**；random_seed为随机种子，便于复现结果；dupe_factor表示重复因子，即重复创建TrainingInstance的次数，**因每次随机生成mask,所以需预测的mask的token是不同的**。
 
 
-[create_pretraining_data.py](https://github.com/google-research/bert/blob/master/create_pretraining_data.py)模块主要是将上述.txt格式的初始训练语料先转化为TrainingInstance对象组成的list，然后将生成的每一个TrainingInstance对象依此转成tf.train.Example对象后，序列化到.tfrecord格式的文件中。**最终生成的.tfrecord格式的文件作为预训练时的直接数据来源。**
+[create_pretraining_data.py](https://github.com/google-research/bert/blob/master/create_pretraining_data.py)模块主要是将上述.txt格式的初始训练语料先转化为TrainingInstance对象组成的list，然后将生成的每一个TrainingInstance对象依此转成tf.train.Example对象后，序列化到.tfrecord格式的文件中。最终生成的.tfrecord格式的文件是**BERT预训练时的数据源。**
 
 
 下面分步骤依此看下各个处理过程。
 
 首先是从原始的.txt格式的语料中生成由TrainingInstance对象组成的list。其主流程代码如下：
-```python
+```
 def create_training_instances(input_files, tokenizer, max_seq_length,
                               dupe_factor, short_seq_prob, masked_lm_prob,
                               max_predictions_per_seq, rng):
@@ -83,7 +83,7 @@ def create_training_instances(input_files, tokenizer, max_seq_length,
 
 上述最重要的操作是如何从单个文档中生成由TrainingInstance对象组成的instances列表，即create_instances_from_document函数。**该函数涉及masked LM和Next Sentence Prediction (NSP)的具体实现细节。** 具体代码如下：
 
-```python
+```
 def create_instances_from_document(
     all_documents, document_index, max_seq_length, short_seq_prob,
     masked_lm_prob, max_predictions_per_seq, vocab_words, rng):
@@ -198,7 +198,7 @@ def create_instances_from_document(
 
   return instances
 ```
-首先确定要从哪个文档生成TrainingInstance对象，接着确定拼接两个segment(**segment是基于句子生成的，一个segment可能只有一个句子，也可能由多个句子拼接而成**)后允许的最大值max_num_tokens，然后循环遍历**该文档中的每一个句子**，**当遍历的前几个句子的token的总数大于等于目标序列的最大值(target_seq_length，不是max_num_tokens)或已遍历到最后一个句子，则从current_chunk中按顺序选取一定数量的句子拼接成tokens_a(segment A)，而tokens_b(segment B)的生成有两种可能。一种是从current_chunk中依次拼接tokens_a剩下的句子，此时tokens_a与tokens_b是连贯的；另一种是随机选择其他文档，并随机地确定要遍历的句子的开始，然后不断拼接直到大于等于target_b_length。需要注意的是，此时需进一步确定current_chunk中未用到的句子，并将遍历该文档句子的索引重新置位到未用到的句子的位置。**
+首先确定要从哪个文档生成TrainingInstance对象，接着确定拼接两个segment(**segment是基于句子生成的，一个segment可能只有一个句子，也可能由多个句子拼接而成**)组成的序列中可容纳的最多token数为max_num_tokens，然后循环遍历**该文档中的每一个句子**，**当遍历的前几个句子对应的token的总数大于等于目标序列的最大值(target_seq_length，不是max_num_tokens)或已遍历到最后一个句子，则从current_chunk中按顺序选取一定数量(随机生成)的句子拼接成tokens_a(segment A)，而tokens_b(segment B)的生成有两种可能(与NSP相对应)。一种是从current_chunk中依次拼接tokens_a剩下的句子，此时tokens_a与tokens_b是连贯的；另一种是随机选择其他文档，并随机地确定要遍历的句子的开始，然后不断拼接直到大于等于target_b_length。需要注意的是，此时需进一步确定current_chunk中未用到的句子，并将遍历该文档句子的索引重新置位到未用到的句子的位置。**
 
 至此tokens_a(segment A)与tokens_b(segment B)便分别确定了。在进一步处理前需保证拼接后两个segment的总tokens数小于等于max_num_tokens，对于超过的部分，每次选择较长的句子随机地去掉头或尾，直至符合要求。
 
@@ -206,7 +206,7 @@ def create_instances_from_document(
 
 接着在最终拼接后的两个segments形成的tokens的基础上做mask操作，生成masked LM任务需要的tokens形式。具体代码如下：
 
-```python
+```
 def create_masked_lm_predictions(tokens, masked_lm_prob,
                                  max_predictions_per_seq, vocab_words, rng):
   """Creates the predictions for the masked LM objective."""
@@ -284,7 +284,7 @@ def create_masked_lm_predictions(tokens, masked_lm_prob,
 ```
 首先记录在NSP阶段生成的tokens序列中每个token(除了[CLS]与[SEP])的位置信息([[1],[2],...,[8],[10],[11,12,13],...],mask时考虑了整词mask的情况)，接着随机打乱位置信息，**复制一份mask前的tokens序列信息到output_tokens中**，确定在该tokens序列中要预测的token的个数(num_to_predict，大概占总tokens数的15%)。然后顺序遍历被打乱的位置，对每个位置的token进行mask操作并记录被mask的位置信息和mask前的token值，**其中有80%的概率该token被替换成'[mask]'，10%的概率该token被替换成自己(保持不变)，10%的概率该token被替换成词表中的任一token。** 直到被mask的token数大于等于设定值num_to_predict。最后将所有被mask的token按位置信息升序排序后,返回mask后的整个序列、被mask的位置及mask前的token。
 
-以上为masked LM任务对应的数据预处理的细节。
+**以上为masked LM任务对应的数据预处理的细节。**
 
 
 最后将生成的与NSP和masked LM相关的特征赋值给TrainingInstance对象对应属性 **(tokens,segment_ids,is_random_next,masked_lm_positions,masked_lm_labels)** ，形成最终的
@@ -295,7 +295,7 @@ def create_masked_lm_predictions(tokens, masked_lm_prob,
  
 最后看下如何将上述的list写入到.tfrecord格式的文件中。具体代码如下：
 
-```python
+```
 def write_instance_to_example_files(instances, tokenizer, max_seq_length,
                                     max_predictions_per_seq, output_files):
   """Create TF example files from `TrainingInstance`s."""
@@ -373,7 +373,7 @@ def write_instance_to_example_files(instances, tokenizer, max_seq_length,
 至此，从.txt的原始语料到.tfrecord格式的预训练的输入文件的转化梳理完成。
 
 ## 预训练 
-先感性的看下预训练的[运行脚本](https://github.com/google-research/bert/blob/master/run_pretraining.py)。
+以下为预训练的[运行脚本](https://github.com/google-research/bert/blob/master/run_pretraining.py)。
 
 ```
 python run_pretraining.py \
@@ -391,14 +391,14 @@ python run_pretraining.py \
   --learning_rate=2e-5
 ```
 
-其中input_file为数据预处理部分生成的.tfrecord格式的文件路径；output_dir为预训练后生成的模型文件的路径；bert_config_file为预训练模型的配置文件；init_checkpoint为预训练模型的初始检查点，如果想要从头开始训练，那么不要此参数；train_batch_size表示训练阶段每步中最多包含的样本数；max_seq_length表示每个样本中含有token个数的最大值，**此值需与数据预处理部分保持一致**；max_predictions_per_seq表示每个序列中需要预测的token的最大个数，**此值需与数据预处理部分保持一致**；num_train_steps表示训练阶段的步数；num_warmup_steps表示学习率从0逐渐增加到初始学习率所需的步数，以后的步数保持固定学习率。
+其中input_file为数据预处理部分生成的.tfrecord格式的文件路径；output_dir为预训练后生成的模型文件的路径；bert_config_file为(预训练)模型的配置文件；init_checkpoint为(预训练)模型的初始检查点，如果想要从头开始训练，那么不要此参数，**一般都是在google预训练好的模型基础上微调，即模型相关的初始参数从ckpt文件中加载，除非自己有特别大的某一领域的语料**；train_batch_size表示训练阶段每步中最多包含的样本数；max_seq_length表示每个样本中含有token个数的最大值，**此值需与数据预处理部分保持一致**，**该参数类似于RNN中的最大时间步，每次可动态调整。针对某一特定领域的语料，可在通用的语言模型的基础上，每次通过设置不同长度的专业领域的句子对微调语言模型，使最终生成的预训练的语言模型更适合某一特定领域**；max_predictions_per_seq表示每个序列中需要预测的token的最大个数，**此值需与数据预处理部分保持一致**；num_train_steps表示训练阶段的步数；num_warmup_steps表示学习率从0逐渐增加到初始学习率所需的步数，以后的步数保持固定学习率。
 
 接着从源码角度重点分析下预训练模块中BERT模型的内部结构。
 
 首先看下如何从输入的.tfrecord文件中解析出BERT需要的输入数据。代码如下：
 
 
-```python
+```
 def input_fn_builder(input_files,
                      max_seq_length,
                      max_predictions_per_seq,
@@ -470,9 +470,9 @@ def input_fn_builder(input_files,
 
 以上代码将.tfrecord文件加载成dataset的对象，接着利用其固有方法进行repeat、shuffle操作后，再利用其map_and_batch方法先将数据集中**序列化的Example对象解码成由各个feature组成的features字典，然后将解析后的值分成多组batch，作为模型的输入数据(model_fn中的features)。**
  
-接着重点看下模型的内部结构。**从宏观上看，其主要有三部分：embeddings、encoder(Transformer特征抽取器)和输出。其中embeddings包括word_embeddings、token_type_embeddings(segment_embeddings)和position_embeddings三部分；encoder部分由num_hidden_layers(12)个Transformer Encoders堆叠而成；输出部分由两种形式，一种是输出最后一层(Transformer) Encoder的sequence_output(形状为[batch_size, seq_length, hidden_size])，这个输出用于masked LM任务的训练。另一种是取sequence_output中的第一个token，然后接一个带有tanh的激活函数的全连接层作为输出(形状为[batch_size, hidden_size])，此输出用于NSP任务的训练。** 上述三部分宏观代码如下：
+接着重点看下模型的内部结构。**从宏观上看，其主要有三部分：embeddings、encoder和输出。其中embeddings包括word_embeddings、token_type_embeddings(segment_embeddings)和position_embeddings三部分；encoder部分由num_hidden_layers(12)个Transformer Encoders堆叠而成；输出部分由两种形式，一种是输出最后一层(Transformer) Encoder的sequence_output(形状为[batch_size, seq_length, hidden_size]，token级别的embedding)，这个输出用于masked LM任务的训练。另一种是取sequence_output中的第一个token，然后接一个带有tanh的激活函数的全连接层作为输出(形状为[batch_size, hidden_size]，句级别的embedding)，此输出用于NSP任务的训练。** 上述三部分宏观代码如下：
 
-```python
+```
 class BertModel(object):
   """BERT model ("Bidirectional Encoder Representations from Transformers").
 
@@ -599,11 +599,20 @@ class BertModel(object):
             kernel_initializer=create_initializer(config.initializer_range))
 ```
 
+论文中给出了预训练的模型在不同任务上的示意图：
+
+![png](/assets/images/nlp/bert/bert-01.png)
+
+其中$$\left( a \right) \text{、}\left( b \right) $$为句子级别的任务，输出端的第一个token表示句子(/句子对)的embedding，即输入的[CLS]对应的输出。 $$\left( c \right) \text{、}\left( d \right) $$为token级别的任务，输出端每一个位置的embedding与输入端各位置相对应。
+
+
 下面重点看下embeddings和encoder部分的内部结构。
 
-**embeddings部分的embedding_lookup主要生成词表中每个词的向量表示，同时将[batch_size, seq_length]的input_ids转换成[batch_size,seq_length,embedding_size]word_embeddings的形式。具体代码如下(embedding_table为模型待学习参数)：**
 
-```python
+
+**embeddings部分的embedding_lookup主要用来生成词表中每个token的向量表示，同时将[batch_size, seq_length]的input_ids转换成形状为[batch_size,seq_length,embedding_size]的word_embeddings形式。具体代码如下(embedding_table为模型待学习参数)：**
+
+```
 def embedding_lookup(input_ids,
                      vocab_size,
                      embedding_size=128,
@@ -655,7 +664,7 @@ def embedding_lookup(input_ids,
 
 **embeddings部分的embedding_postprocessor主要是在word_embeddings的基础上增加segment_id和position信息，最后将叠加后embedding分别进行layer_norm(对每个样本的不同维度进行归一化操作，而batch_norm则是对不同样本的同一特征进行归一化操作)和dropout(一个张量中某几个位置的值变成0)操作。具体代码如下(full_position_embeddings与full_position_embeddings为模型待学习参数)：**
 
-```python
+```
 def embedding_postprocessor(input_tensor,
                             use_token_type=False,
                             token_type_ids=None,
@@ -752,13 +761,24 @@ def embedding_postprocessor(input_tensor,
   return output
 ```
 
+论文中关于embedding部分的示意图如下：
+
+![png](/assets/images/nlp/bert/bert-02.png)
+
 至此embeddings部分的结构介绍完毕。
 
-接着介绍encoder部分，其是BERT模型的核心。上述embeddings部分的最终输出为初始transformer encoder (block)的输入。
 
-**而一个transformer encoder (block)由多头注意层(共有hidden_size个单元)和前馈神经网络层(有激活函数的dense层，共有intermediate_size个单元，约定有如下关系intermediate_size=4\*hidden_size)两个子层构成。其中每个子层的输出分别进行线性投影(没有激活函数的dense层)、dropout、Resnet(残差，输入与输出直接相加)与layer_norm操作。前馈神经网络层的输出经layer_norm操作后的输出为当前一个transformer encoder (block)的最终输出，记录该输出并将其作为下一个transformer encoder (block)的输入。循环上述过程num_hidden_layers次(堆叠num_hidden_layers个transformer encoder (block))，形成最终encoder部分的输出。值得说明的是，上述数据转换过程都是2D的** 以上描述的整个过程可看作一个transformer model，具体代码如下：
+接着看下encoder部分，其是BERT模型的核心。上述embeddings部分的最终输出作为第一层的transformer encoder (block)的输入。
 
-```python
+**而一个transformer encoder (block)由多头注意层(共有hidden_size个单元)和前馈神经网络层(有激活函数的dense层，共有intermediate_size个单元，约定有如下关系intermediate_size=4\*hidden_size)两个子层构成。其中每个子层的输出分别进行线性投影(没有激活函数的dense层)、dropout、Resnet(残差，输入与输出直接相加)与layer_norm操作。** 
+
+**前馈神经网络层的输出经layer_norm后的输出为一个transformer encoder (block)的最终输出，保存该输出并将其作为下一个transformer encoder (block)的输入。循环上述过程num_hidden_layers次(堆叠num_hidden_layers个transformer encoder (block))，形成最终encoder部分的输出。值得说明的是，上述数据转换过程都是2D的。** 以上描述的整个过程可看作一个transformer model，其简易示意图与具体代码分别如下：
+
+
+![png](/assets/images/nlp/bert/bert-03.png)
+
+
+```
 def transformer_model(input_tensor,
                       attention_mask=None,
                       hidden_size=768,
@@ -904,7 +924,7 @@ def transformer_model(input_tensor,
 
 由上述分析可知，多头注意力是在原有tensor的基础上进行投影、转置、变形等操作完成计算的。相关代码如下：
 
-```python
+```
 def attention_layer(from_tensor,
                     to_tensor,
                     attention_mask=None,
