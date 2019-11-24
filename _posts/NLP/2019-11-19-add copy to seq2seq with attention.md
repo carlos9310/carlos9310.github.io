@@ -139,7 +139,7 @@ $$
 loss_t=-\log P\left( w_{t}^{*} \right) +\lambda \sum_i{\min \left( a_{i}^{t},c_{i}^{t} \right)}
 $$
 
-以上便是作者们提出的pointer-generator network + coverage mechanism的思路流程，同时作者也开源了整体模型的实现：[Code for the ACL 2017 paper "Get To The Point: Summarization with Pointer-Generator Networks"](https://github.com/abisee/pointer-generator)
+以上便是作者们提出的pointer-generator network + coverage mechanism的思路流程，同时作者也开源了整体模型的实现：[Code for the ACL 2017 paper "Get To The Point: Summarization with Pointer-Generator Networks"](https://github.com/abisee/pointer-generator)，不过目前已不再更新且基于python2实现的，本人重新整理了份支持python3的版本：[https://github.com/carlos9310/pointer-generator](https://github.com/carlos9310/pointer-generator)。
 
 ## 参考
 
