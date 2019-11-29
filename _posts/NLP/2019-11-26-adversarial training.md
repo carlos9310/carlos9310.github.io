@@ -189,3 +189,5 @@ categories: [NLP]
 - [Semi-supervised Sequence Learning](https://arxiv.org/abs/1511.01432)
 
 - [https://github.com/tensorflow/models/tree/master/research/adversarial_text](https://github.com/tensorflow/models/tree/master/research/adversarial_text)
+
+- [关于 Adversarial Training 在 NLP 领域的一些思考](https://zhuanlan.zhihu.com/p/31920187)
