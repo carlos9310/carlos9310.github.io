@@ -175,6 +175,9 @@ categories: [NLP]
 
 ![png](/assets/images/nlp/at/at-16.png)
 
+## conclusion
+由上述实验可知，对抗训练和虚拟对抗训练在文本分类任务的序列模型中具有良好的正则化性能，同时还改善了词嵌入的质量。作者们提出的对抗训练的方法有望用于其他文本领域的任务，如机器翻译、词或段落的分布式表示以及问答任务。也可用于其他通用的序列任务，如视频或语音。
+
 ## 参考
 
 - [Adversarial Training Methods for Semi-Supervised Text Classification](https://arxiv.org/abs/1605.07725)
