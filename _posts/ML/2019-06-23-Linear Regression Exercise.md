@@ -1,5 +1,5 @@
 ---
-title: 机器学习初体验-Linear Regression Exercise
+title: Linear Regression Exercise
 layout: post
 categories: ML
 description: 机器学习介绍
