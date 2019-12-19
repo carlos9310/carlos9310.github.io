@@ -478,3 +478,5 @@ $$P(class) = (log(class + 2) - log(class + 1)) / log(range\_max + 1)$$
 * [https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/word2vec/word2vec_basic.py](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/word2vec/word2vec_basic.py)
 * [tensorflow词向量训练实战](https://mp.weixin.qq.com/s/dfNbvDizbigquizLQgZNug)
 
+* [word2vec 中的数学原理详解](https://www.cnblogs.com/peghoty/p/3857839.html)
+
