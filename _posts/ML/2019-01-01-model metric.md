@@ -102,6 +102,11 @@ PR(Precision - Recall)曲线以Precision为纵坐标，以Recall(TPR)为横坐�
 # 搜(检)索
 
 # 生成
+包括但不限于翻译、摘要、对话、机器阅读理解(MRC)、问答等
+
+## BLEU
+
+## ROUGE
 
 
 
