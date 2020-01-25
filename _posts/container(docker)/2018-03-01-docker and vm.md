@@ -11,7 +11,7 @@ docker是一种**容器化**的虚拟化技术，它与传统的虚拟机(virtua
 
 传统的虚拟机首先通过**Hypervisor层**对物理硬件进行虚拟化，然后在虚拟的硬件资源上安装**从操作系统(guest os)**，最后将相关**应用**运行在从操作系统上。
 
-而docker不像虚拟机那样利用Hypervisor和guest os实现资源与环境的隔离，其仅通过一个docker daemon/engine来实现**资源限制与环境隔离**(主要利用linux内核本身支持的容器方式来实现这一功能)。 **docker daemon/engine可以简单看成对Linux内核中的NameSpace、Cgroup、镜像管理文件系统操作的封装。** 简单的说，docker利用namespace实现**系统环境的隔离**；利用Cgroup实现**资源限制**；利用镜像实现**根目录环境的隔离**。 
+而docker不像虚拟机那样利用Hypervisor和guest os实现资源与环境的隔离，其仅通过一个docker daemon/engine来实现**资源限制与环境隔离(终极目标是app的隔离)**(主要利用linux内核本身支持的容器方式来实现这一功能)。 **docker daemon/engine可以简单看成对Linux内核中的NameSpace、Cgroup、镜像管理文件系统操作的封装。** 简单的说，docker利用namespace实现**系统环境的隔离**；利用Cgroup实现**资源限制**；利用镜像实现**根目录环境的隔离**。 
 
 ## 小结
 由上述分析可知：
