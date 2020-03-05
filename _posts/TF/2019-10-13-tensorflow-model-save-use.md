@@ -3,6 +3,13 @@ layout: post
 title: tensorflow中模型的保存与使用总结
 categories: [tensorflow]
 ---
+
+推荐使用 tensorflow 1.13版本
+
+```
+pip install --index-url https://pypi.douban.com/simple tensorflow==1.13.2
+```
+
 以经典的鸢尾花分类任务为导向，通过简单的三层神经网络模型总结tensorflow(1.x)中模型的保存与使用。
 
 涉及的主要主要知识点有高阶estimator(tf.train.LoggingTensorHook、tf.estimator.Estimator().export_savedmodel)、低阶session(tf.train.Saver().saver/tf.train.Saver().restore、tf.saved_model.builder.SavedModelBuilder(model_path).save/tf.saved_model.loader.load)、tf.data、tf.feature_column、tf.trainable_variables、SavedModel CLI及tensorflow serving等。
